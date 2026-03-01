@@ -37,21 +37,16 @@ export default function Home() {
     init();
   }, [navigate]);
 
-  const openForm = () => {
-    if (userType === "type1") {
-      window.open(
-        "https://docs.google.com/forms/d/YOUR_FORM_TYPE1_LINK",
-        "_blank"
-      );
-    }
+const openForm = () => {
+  if (!userType) return;
 
-    if (userType === "type2") {
-      window.open(
-        "https://docs.google.com/forms/d/YOUR_FORM_TYPE2_LINK",
-        "_blank"
-      );
-    }
+  const links = {
+    type1: "https://forms.gle/FSGzF6wzkm4qfYkb7",
+    type2: "https://forms.gle/A56xjnQ8tq5bH7xc8",
   };
+
+  window.open(links[userType], "_blank");
+};
 
   if (loading) {
     return (

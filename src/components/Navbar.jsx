@@ -1,43 +1,74 @@
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 
 export default function Navbar() {
+  const baseClass =
+    "relative font-medium transition-colors duration-200 pb-2";
+
+  const inactiveClass =
+    "text-gray-500 hover:text-black";
+
+  const activeClass =
+    "text-black after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-blue-600 after:rounded";
+
   return (
-    <nav className="bg-white border-b border-gray-200 relative z-50">
-      <div className="container flex items-center justify-between h-[80px]">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[80px]">
 
         {/* LEFT — LOGO */}
-        <div className="flex items-center gap-3">
-          <Link to="/">
-            <img
-              src={logo}
-              alt="roomfolio"
-              className="h-[130px] object-contain"
-            />
-          </Link>
-        </div>
+        <Link to="/" className="flex items-center">
+          <img
+            src={logo}
+            alt="roomfolio"
+            className="h-[130px] object-contain"
+          />
+        </Link>
 
         {/* CENTER — MENU */}
-        <div className="flex items-center gap-12 text-[15px] font-medium">
-          
-          <Link to="/" className="relative text-black">
+        <div className="flex items-center gap-12 text-[15px]">
+
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `${baseClass} ${isActive ? activeClass : inactiveClass}`
+            }
+          >
             Tìm Bạn Cùng Phòng
-            <span className="absolute left-0 -bottom-[8px] w-full h-[2px] bg-blue-600 rounded"></span>
-          </Link>
+          </NavLink>
 
-          <a className="text-gray-500 hover:text-black transition">
+          <NavLink
+            to="/safety"
+            className={({ isActive }) =>
+              `${baseClass} ${isActive ? activeClass : inactiveClass}`
+            }
+          >
             Quy Tắc An Toàn
-          </a>
+          </NavLink>
 
-          <a className="text-gray-500 hover:text-black transition">
+          <NavLink
+            to="/how-it-works"
+            className={({ isActive }) =>
+              `${baseClass} ${isActive ? activeClass : inactiveClass}`
+            }
+          >
             Cách Hoạt Động
-          </a>
+          </NavLink>
+
+<NavLink
+  to="/preview"
+  className={({ isActive }) =>
+    `${baseClass} ${isActive ? activeClass : inactiveClass}`
+  }
+>
+ Figma Prototype
+</NavLink>
 
         </div>
 
         {/* RIGHT — AUTH */}
         <div className="flex items-center gap-6 text-[15px] font-medium">
-          
+
           <Link
             to="/login"
             className="text-blue-600 hover:opacity-80 transition"

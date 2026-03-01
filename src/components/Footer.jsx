@@ -13,7 +13,7 @@ export default function Footer() {
 
  <p>Công ty TNHH Roomfolio</p>
           <p>Địa chỉ công ty: 15 D5, P. Thạnh Mỹ Tây, TP.HCM</p>
-          <p>Email hỗ trợ: roomfolio@info.vn</p>
+          <p>Email hỗ trợ: roomfolio6767@gmail.com</p>
           <p>Hotline: +84 905 765 339</p>
         </div>
 
