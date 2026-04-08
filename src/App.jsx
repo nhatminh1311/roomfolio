@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import HowItWorks from "./pages/HowItWorks";
 import Safety from "./pages/Safety";
 import Preview from "./pages/Preview";
+import EKYC from "./pages/EKYC";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
       <Route path="/safety" element={<Safety />} />
-<Route path="/preview" element={<Preview />} />
+      <Route path="/ekyc" element={<EKYC />} />
+      <Route path="/preview" element={<Preview />} />
     </Routes>
   );
 }

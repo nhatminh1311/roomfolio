@@ -23,7 +23,7 @@ export default function Home() {
       const { data: profileData, error: profileError } =
         await supabase
           .from("profiles")
-          .select("first_name, last_name")
+          .select("first_name, last_name, ekyc_verified, ekyc_submitted")
           .eq("id", userData.user.id)
           .maybeSingle();
 
@@ -37,16 +37,16 @@ export default function Home() {
     init();
   }, [navigate]);
 
-const openForm = () => {
-  if (!userType) return;
+  const openForm = () => {
+    if (!userType) return;
 
-  const links = {
-    type1: "https://forms.gle/FSGzF6wzkm4qfYkb7",
-    type2: "https://forms.gle/A56xjnQ8tq5bH7xc8",
+    const links = {
+      type1: "https://forms.gle/FSGzF6wzkm4qfYkb7",
+      type2: "https://forms.gle/A56xjnQ8tq5bH7xc8",
+    };
+
+    window.open(links[userType], "_blank");
   };
-
-  window.open(links[userType], "_blank");
-};
 
   if (loading) {
     return (
@@ -74,10 +74,26 @@ const openForm = () => {
                 : "U"}
             </div>
 
-            <div className="font-medium">
-              {profile
-                ? `${profile.last_name} ${profile.first_name}`
-                : "User"}
+            <div>
+              <div className="font-medium">
+                {profile
+                  ? `${profile.last_name} ${profile.first_name}`
+                  : "User"}
+              </div>
+
+              <div className="text-sm">
+                {!profile?.ekyc_submitted && (
+                  <span className="text-red-500">Chưa xác thực</span>
+                )}
+
+                {profile?.ekyc_submitted && !profile?.ekyc_verified && (
+                  <span className="text-yellow-500">Đang chờ duyệt</span>
+                )}
+
+                {profile?.ekyc_verified && (
+                  <span className="text-green-600">Đã xác thực</span>
+                )}
+              </div>
             </div>
           </div>
 
@@ -88,101 +104,62 @@ const openForm = () => {
       <div className="flex flex-col items-center justify-center mt-24">
 
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Làm bài Trắc nghiệm Tính cách để "Matching" ngay 💙
+          Làm bài Trắc nghiệm Tính cách để "Matching" ngay
         </h1>
 
         <p className="text-gray-600 mb-10 text-center max-w-xl">
-          Bạn hãy chọn 1 trong 2 nhu cầu dưới đây để bắt đầu bài test tính cách nhé ;)
+          Bạn hãy chọn 1 trong 2 nhu cầu dưới đây để bắt đầu bài test
         </p>
 
         <div className="flex gap-6 mb-10 flex-wrap justify-center">
 
-          {/* TYPE 1 */}
           <button
             onClick={() =>
               setUserType(userType === "type1" ? "" : "type1")
             }
-            className={`px-6 py-4 rounded-xl border w-80 text-left transition ${
+            className={`px-6 py-4 rounded-xl border w-80 text-left ${
               userType === "type1"
                 ? "bg-blue-500 text-white"
-                : "bg-white hover:shadow-md"
+                : "bg-white"
             }`}
           >
-            <div
-              className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold mb-3 ${
-                userType === "type1"
-                  ? "bg-white text-blue-500"
-                  : "bg-blue-500 text-white"
-              }`}
-            >
+            <div className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold mb-3">
               1
             </div>
 
             <p className="text-sm">
-              Đã có roommate rùi, muốn test độ "hợp cạ" giữa 2 người coi saoo 👯‍♀️
+              Đã có roommate
             </p>
           </button>
 
-          {/* TYPE 2 */}
           <button
             onClick={() =>
               setUserType(userType === "type2" ? "" : "type2")
             }
-            className={`px-6 py-4 rounded-xl border w-80 text-left transition ${
+            className={`px-6 py-4 rounded-xl border w-80 text-left ${
               userType === "type2"
                 ? "bg-pink-500 text-white"
-                : "bg-white hover:shadow-md"
+                : "bg-white"
             }`}
           >
-            <div
-              className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold mb-3 ${
-                userType === "type2"
-                  ? "bg-white text-pink-500"
-                  : "bg-pink-500 text-white"
-              }`}
-            >
+            <div className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold mb-3">
               2
             </div>
 
             <p className="text-sm">
-              Đang "độc toàn thân", muốn tìm 1 bạn roommate lâu dài 🙏
+              Tìm roommate
             </p>
           </button>
 
         </div>
 
-        {/* CONTENT TYPE 1 */}
-        {userType === "type1" && (
-          <div className="text-center max-w-xl">
-            <p className="mb-4 text-gray-600">
-              Bạn đang kiểm tra độ tương thích giữa 2 người.
-              Sau khi cả hai hoàn thành form, hệ thống sẽ phân tích và gửi kết quả qua email.
-            </p>
-
-            <button
-              onClick={openForm}
-              className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition"
-            >
-              Làm bài test cho 2 người
-            </button>
-          </div>
-        )}
-
-        {/* CONTENT TYPE 2 */}
-        {userType === "type2" && (
-          <div className="text-center max-w-xl">
-            <p className="mb-4 text-gray-600">
-              Hệ thống sẽ phân tích tính cách của bạn và đề xuất roommate phù hợp nhất.
-              Kết quả sẽ được gửi qua email cá nhân của bạn.
-            </p>
-
-            <button
-              onClick={openForm}
-              className="bg-pink-500 text-white px-8 py-3 rounded-full hover:bg-pink-600 transition"
-            >
-              Bắt đầu tìm roommate
-            </button>
-          </div>
+        {!profile?.ekyc_verified && (
+          <button
+            onClick={() => navigate("/ekyc")}
+            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded"
+          >
+            Xác thực tài khoản
+          </button>
         )}
 
       </div>
