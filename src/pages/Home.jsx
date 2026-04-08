@@ -22,7 +22,6 @@ export default function Home() {
         return;
       }
 
-      // user hiện tại
       const { data: profileData } = await supabase
         .from("profiles")
         .select("first_name, last_name, ekyc_verified, ekyc_submitted")
@@ -31,7 +30,6 @@ export default function Home() {
 
       if (profileData) setProfile(profileData);
 
-      // danh sách user khác
       const { data: usersData } = await supabase
         .from("profiles")
         .select("id, first_name, last_name, gender, location, school_company, ekyc_verified")
@@ -49,8 +47,9 @@ export default function Home() {
     if (!userType) return;
 
     const links = {
-      type1: "https://forms.gle/FSGzF6wzkm4qfYkb7",
+      type1: "https://forms.gle/A56xjnQ8tq5bH7xc8",
       type2: "https://forms.gle/A56xjnQ8tq5bH7xc8",
+      type3: "https://forms.gle/FSGzF6wzkm4qfYkb7",
     };
 
     window.open(links[userType], "_blank");
@@ -71,12 +70,10 @@ export default function Home() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto h-[80px] flex items-center justify-between">
 
-          {/* LOGO */}
           <Link to="/home">
             <img src={logo} alt="roomfolio" className="h-[130px]" />
           </Link>
 
-          {/* MENU */}
           <div className="flex items-center gap-10 text-[15px] font-medium">
             <button onClick={() => navigate("/home")} className="text-gray-600 hover:text-black">
               Trang chủ
@@ -91,7 +88,7 @@ export default function Home() {
             </button>
           </div>
 
-          {/* USER + DROPDOWN */}
+          {/* USER */}
           <div className="relative">
             <div
               onClick={() => setOpenMenu(!openMenu)}
@@ -155,46 +152,57 @@ export default function Home() {
         </h1>
 
         <p className="text-gray-600 mb-10 text-center max-w-xl">
-          Bạn hãy chọn 1 trong 2 nhu cầu dưới đây để bắt đầu bài test tính cách nhé ;)
+          Chọn đúng nhu cầu của bạn để bắt đầu hành trình tìm roommate phù hợp nhé ;)
         </p>
 
-        <div className="flex gap-6 mb-10 flex-wrap justify-center">
+        {/* 3 BLOCK */}
+        <div className="grid grid-cols-3 gap-6 mb-10">
 
-          {/* TYPE 1 */}
           <button
-            onClick={() =>
-              setUserType(userType === "type1" ? "" : "type1")
-            }
-            className={`px-6 py-4 rounded-xl border w-80 text-left ${
+            onClick={() => setUserType("type1")}
+            className={`p-6 rounded-xl border text-left ${
               userType === "type1"
                 ? "bg-blue-500 text-white"
                 : "bg-white hover:shadow-md"
             }`}
           >
-            <div className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold mb-3">
-              1
+            <div className="font-bold mb-2">
+              Chưa có phòng, tìm roommate cùng search 🏠
             </div>
-            <p className="text-sm">
-              Đã có roommate rùi
+            <p className="text-sm opacity-80">
+              Tìm người đồng hành để cùng nhau săn phòng và chia sẻ chi phí.
             </p>
           </button>
 
-          {/* TYPE 2 */}
           <button
-            onClick={() =>
-              setUserType(userType === "type2" ? "" : "type2")
-            }
-            className={`px-6 py-4 rounded-xl border w-80 text-left ${
+            onClick={() => setUserType("type2")}
+            className={`p-6 rounded-xl border text-left ${
               userType === "type2"
                 ? "bg-pink-500 text-white"
                 : "bg-white hover:shadow-md"
             }`}
           >
-            <div className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold mb-3">
-              2
+            <div className="font-bold mb-2">
+              Đã có phòng, tìm roommate ở chung ✨
             </div>
-            <p className="text-sm">
-              Tìm roommate
+            <p className="text-sm opacity-80">
+              Bạn có phòng sẵn? Tìm người phù hợp để sống cùng.
+            </p>
+          </button>
+
+          <button
+            onClick={() => setUserType("type3")}
+            className={`p-6 rounded-xl border text-left ${
+              userType === "type3"
+                ? "bg-purple-500 text-white"
+                : "bg-white hover:shadow-md"
+            }`}
+          >
+            <div className="font-bold mb-2">
+              Đã có roommate, test độ hợp 🔍
+            </div>
+            <p className="text-sm opacity-80">
+              Xem mức độ hợp cạ và nhận báo cáo tính cách chi tiết.
             </p>
           </button>
 
@@ -218,7 +226,6 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-6">
             {users.map((u) => (
               <div key={u.id} className="bg-white p-4 rounded-xl shadow border">
-
                 <div className="flex justify-between">
                   <div className="font-semibold">
                     {u.last_name} {u.first_name}
@@ -238,7 +245,6 @@ export default function Home() {
                 <div className="text-sm text-gray-500">
                   {u.school_company}
                 </div>
-
               </div>
             ))}
           </div>
